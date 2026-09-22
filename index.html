@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Eric-YHS — ericyhs.me</title>
+    <meta
+      name="description"
+      content="Personal site of Eric-YHS: machine learning research, molecular generation, agents and web tooling."
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #ffffff;
+        --fg: #16181d;
+        --muted: #5c6470;
+        --card: #f6f7f9;
+        --line: #e3e6ea;
+        --accent: #2f6feb;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f1115;
+          --fg: #eaeef2;
+          --muted: #9aa4b0;
+          --card: #171a20;
+          --line: #262b33;
+          --accent: #6ea8fe;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font: 16px/1.65 ui-sans-serif, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      }
+      .wrap {
+        max-width: 820px;
+        margin: 0 auto;
+        padding: 56px 20px 72px;
+      }
+      header h1 {
+        font-size: clamp(28px, 5vw, 40px);
+        margin: 0 0 8px;
+        letter-spacing: -0.02em;
+      }
+      header p {
+        color: var(--muted);
+        margin: 0;
+        max-width: 62ch;
+      }
+      h2 {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin: 44px 0 14px;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      ul.links {
+        list-style: none;
+        padding: 0;
+        margin: 22px 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      ul.links a {
+        display: inline-block;
+        padding: 8px 14px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--card);
+        color: var(--fg);
+      }
+      .grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+      .card {
+        display: block;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--card);
+        padding: 14px 16px;
+        color: var(--fg);
+      }
+      .card:hover {
+        text-decoration: none;
+        border-color: var(--accent);
+      }
+      .card strong {
+        display: block;
+        font-size: 15px;
+        margin-bottom: 4px;
+      }
+      .card span {
+        color: var(--muted);
+        font-size: 13.5px;
+      }
+      footer {
+        margin-top: 48px;
+        color: var(--muted);
+        font-size: 13.5px;
+        border-top: 1px solid var(--line);
+        padding-top: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>Eric-YHS</h1>
+        <p>
+          Working on machine learning systems: molecular graph generation and
+          representation learning, LLM agents, and interactive web tooling.
+        </p>
+        <ul class="links">
+          <li><a href="https://github.com/Eric-YHS">GitHub</a></li>
+          <li><a href="https://github.com/Eric-YHS?tab=repositories">All repositories</a></li>
+        </ul>
+      </header>
+
+      <h2>Selected projects</h2>
+      <div class="grid">
+        <a class="card" href="https://github.com/Eric-YHS/RetroBridge">
+          <strong>RetroBridge</strong>
+          <span>Retrosynthesis as continuous-to-discrete diffusion in a latent graph space.</span>
+        </a>
+        <a class="card" href="https://github.com/Eric-YHS/RGR">
+          <strong>RGR</strong>
+          <span>Latent-alignment-guided graph generation for retrosynthesis.</span>
+        </a>
+        <a class="card" href="https://github.com/Eric-YHS/RARB_plus">
+          <strong>RARB_plus</strong>
+          <span>Retrieval-augmented graph generation with weighted fingerprint retrieval and reranking.</span>
+        </a>
+        <a class="card" href="https://github.com/Eric-YHS/MolMSAE">
+          <strong>MolMSAE</strong>
+          <span>Multi-scale latent representation learning and autoencoding for molecular graphs.</span>
+        </a>
+        <a class="card" href="https://github.com/Eric-YHS/GraphEncoder">
+          <strong>GraphEncoder</strong>
+          <span>Encoder-side experiments for 3D molecular property prediction and diffusion.</span>
+        </a>
+        <a class="card" href="https://github.com/Eric-YHS/ClawFlow">
+          <strong>ClawFlow</strong>
+          <span>Lightweight agent runtime / AgentOS kernel prototype.</span>
+        </a>
+        <a class="card" href="https://github.com/Eric-YHS/BiasBench">
+          <strong>BiasBench</strong>
+          <span>Next.js leaderboard prototype for LLM answer-bias evaluation.</span>
+        </a>
+        <a class="card" href="https://github.com/Eric-YHS/RGL">
+          <strong>RGL</strong>
+          <span>Interactive 3D traffic-light experiment site built with Three.js and Vite.</span>
+        </a>
+        <a class="card" href="https://github.com/Eric-YHS/Postgraduate-Entrance-Exam-Mini-Program">
+          <strong>Postgraduate Exam Mini Program</strong>
+          <span>WeChat mini program for exam preparation and related learning services.</span>
+        </a>
+      </div>
+
+      <footer>
+        Hosted on GitHub Pages · <a href="https://ericyhs.me">ericyhs.me</a>
+      </footer>
+    </div>
+  </body>
+</html>

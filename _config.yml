@@ -1,0 +1,7 @@
+# Minimal Jekyll configuration for the GitHub Pages (legacy) build.
+# The site is a single static page: no theme, no plugins, no collections.
+title: Eric-YHS
+description: Personal landing page for Eric-YHS
+
+exclude:
+  - README.md
