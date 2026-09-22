@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Jekyll config must be valid YAML
+        run: python -c "import yaml; yaml.safe_load(open('_config.yml')); print('_config.yml ok')"
+
+      - name: CNAME must keep the custom domain
+        run: |
+          test "$(tr -d '\r\n' < CNAME)" = "ericyhs.me" || {
+            echo "CNAME must contain exactly ericyhs.me, found: $(cat CNAME)"; exit 1; }
+          echo 'CNAME ok'
+
+      - name: Page must stay a single dependency-free document
+        run: |
+          python3 - <<'PY'
+          import re, sys
+          html = open("index.html", encoding="utf-8").read()
+          problems = []
+          if not re.search(r"<!doctype html>", html, re.I):
+              problems.append("index.html: missing <!DOCTYPE html>")
+          if 'lang="' not in html:
+              problems.append("index.html: <html> needs a lang attribute")
+          if not re.search(r"<title>[^<]+</title>", html, re.I):
+              problems.append("index.html: missing a <title>")
+          # The documented design is: no JavaScript, no external fonts/CSS, no analytics.
+          for tag, pattern in (
+              ("script", r"<script\b[^>]*\bsrc="),
+              ("link stylesheet", r"<link\b[^>]*stylesheet"),
+              ("iframe", r"<iframe\b"),
+              ("img", r"<img\b[^>]*\bsrc=[\"']https?://"),
+          ):
+              if re.search(pattern, html, re.I):
+                  problems.append(f"index.html: external {tag} found - the page is meant to be dependency-free")
+          if "@import" in html or "@font-face" in html:
+              problems.append("index.html: web fonts found - only system fonts are allowed")
+          if "prefers-color-scheme" not in html:
+              problems.append("index.html: prefers-color-scheme media query is missing")
+          for problem in problems:
+              print("error:", problem)
+          raise SystemExit(1 if problems else 0)
+          print("index.html ok  (self-contained, light/dark, no external assets)")
+          PY
+
+      - name: Every project card must point at an existing public repository
+        run: |
+          python3 - <<'PY'
+          import re, sys, urllib.error, urllib.request
+          from urllib.parse import urlparse
+
+          html = open("index.html", encoding="utf-8").read()
+          links = sorted(set(re.findall(r'href="(https://[^"]+)"', html)))
+          broken, checked = [], 0
+          for url in links:
+              path = urlparse(url).path
+              # only validate own-account repo cards; the profile link is a different shape
+              if not re.fullmatch(r"/Eric-YHS/[^/]+", path):
+                  continue
+              checked += 1
+              request = urllib.request.Request(
+                  f"https://api.github.com/repos{path}",
+                  headers={"Accept": "application/vnd.github+json",
+                           "User-Agent": "pages-ci"},
+              )
+              try:
+                  urllib.request.urlopen(request, timeout=30)
+              except urllib.error.HTTPError as exc:
+                  if exc.code == 404:
+                      broken.append(url)
+                  else:
+                      print(f"warning: {url} -> HTTP {exc.code}, not treating as broken")
+          if broken:
+              print("Project cards linking to repositories that no longer exist:")
+              print("\n".join(broken))
+              sys.exit(1)
+          print(f"ok  {checked} project card links resolve")
+          PY
